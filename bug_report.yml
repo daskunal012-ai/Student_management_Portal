@@ -1,0 +1,29 @@
+name: Bug report
+description: Report a reproducible problem in the demo application.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include passwords, secret keys, or real student information.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the issue and what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: "1. Sign in with a fictional demo account..."
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Python version, operating system, and whether this is local or hosted.
+    validations:
+      required: true

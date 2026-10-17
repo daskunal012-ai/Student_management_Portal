@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Students · School Portal{% endblock %}
+{% block page_heading %}Student directory{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h1>Students <span>✦</span></h1><p>Manage student profiles, class information, and guardian contacts.</p></div>{% if current_user.role == 'admin' %}<a class="btn btn-primary" href="{{ url_for('student_new') }}"><i class="bi bi-plus-lg me-1"></i> Add student</a>{% endif %}</div>
+<div class="panel">
+  <form class="filter-bar" method="get"><div class="search-field"><i class="bi bi-search"></i><input class="form-control" name="q" value="{{ search }}" placeholder="Search name or admission number"></div><select class="form-select" name="class"><option value="">All grades</option>{% for n in range(1,13) %}<option value="{{ n }}" {% if class_filter == n|string %}selected{% endif %}>Grade {{ n }}</option>{% endfor %}</select><button class="btn btn-outline-secondary">Filter</button><a class="btn btn-light" href="{{ url_for('students') }}">Reset</a></form>
+  <div class="panel-header"><div><h3>All student records</h3><p>{{ students|length }} matching student(s)</p></div></div>
+  <div class="table-responsive"><table class="table custom-table align-middle"><thead><tr><th>STUDENT</th><th>ADMISSION NO.</th><th>CLASS</th><th>GUARDIAN</th><th>CONTACT</th><th></th></tr></thead><tbody>
+  {% for s in students %}<tr><td><div class="person-cell"><span class="person-avatar">{{ s.full_name[:1]|upper }}</span><div><b>{{ s.full_name }}</b><small>{{ s.email or 'No email provided' }}</small></div></div></td><td>{{ s.admission_no }}</td><td><span class="class-pill">Grade {{ s.class_name }}-{{ s.section }}</span></td><td>{{ s.guardian_name or '—' }}</td><td>{{ s.guardian_phone or '—' }}</td><td><a class="btn btn-sm btn-light" href="{{ url_for('student_detail', student_id=s.id) }}">View <i class="bi bi-arrow-up-right"></i></a></td></tr>
+  {% else %}<tr><td colspan="6"><div class="empty-state"><i class="bi bi-search"></i><p>No students found. Try changing your search.</p></div></td></tr>{% endfor %}
+  </tbody></table></div>
+</div>
+{% endblock %}

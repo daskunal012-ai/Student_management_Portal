@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}User accounts · School Portal{% endblock %}
+{% block page_heading %}User access management{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h1>User accounts <span>✦</span></h1><p>Review account roles and enable or disable access.</p></div></div>
+<div class="notice-box mb-3"><i class="bi bi-shield-lock"></i><span>Only administrators can manage account access. Disabling an account prevents the user from signing in.</span></div>
+<div class="panel"><div class="panel-header"><div><h3>Registered accounts</h3><p>{{ users|length }} account(s)</p></div></div><div class="table-responsive"><table class="table custom-table align-middle"><thead><tr><th>USER</th><th>USERNAME</th><th>ROLE</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody>{% for u in users %}<tr><td><div class="person-cell"><span class="person-avatar">{{ u.display_name[:1]|upper }}</span><b>{{ u.display_name }}</b></div></td><td>{{ u.username }}</td><td><span class="class-pill">{{ u.role|title }}</span></td><td><span class="status-pill {{ 'status-inactive' if not u.active else '' }}"><i class="bi bi-circle-fill"></i> {{ 'Active' if u.active else 'Disabled' }}</span></td><td>{% if u.id != current_user.id %}<form method="post" action="{{ url_for('toggle_user', user_id=u.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-sm {{ 'btn-outline-success' if not u.active else 'btn-outline-danger' }}">{{ 'Enable' if not u.active else 'Disable' }}</button></form>{% else %}<span class="muted small">Current account</span>{% endif %}</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

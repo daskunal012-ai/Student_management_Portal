@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Subjects · School Portal{% endblock %}
+{% block page_heading %}Subject management{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h1>Subjects <span>✦</span></h1><p>Manage subjects and their maximum marks.</p></div></div>
+<div class="content-grid">
+  <div class="panel"><div class="panel-header"><div><h3>Subject catalogue</h3><p>{{ subjects|length }} subject(s) configured</p></div></div><div class="table-responsive"><table class="table custom-table align-middle"><thead><tr><th>SUBJECT</th><th>CODE</th><th>MAX MARKS</th></tr></thead><tbody>{% for s in subjects %}<tr><td><div class="subject-name"><span class="subject-icon"><i class="bi bi-journal-text"></i></span><b>{{ s.name }}</b></div></td><td><span class="class-pill">{{ s.code }}</span></td><td>{{ s.max_marks }}</td></tr>{% else %}<tr><td colspan="3">No subjects yet.</td></tr>{% endfor %}</tbody></table></div></div>
+  {% if current_user.role == 'admin' %}<div class="panel"><div class="panel-header"><div><h3>Add a subject</h3><p>Set a name, code and maximum marks.</p></div></div><form method="post" class="stack-form">{{ form.hidden_tag() }}{% for field in [form.name,form.code,form.max_marks] %}<div><label class="form-label">{{ field.label.text }}</label>{{ field(class="form-control") }}{% for e in field.errors %}<small class="field-error">{{ e }}</small>{% endfor %}</div>{% endfor %}{{ form.submit(class="btn btn-primary w-100 mt-2") }}</form></div>{% else %}<div class="panel info-panel"><i class="bi bi-info-circle"></i><h3>Teacher access</h3><p>Teachers can view subjects. An administrator manages the subject catalogue.</p></div>{% endif %}
+</div>
+{% endblock %}

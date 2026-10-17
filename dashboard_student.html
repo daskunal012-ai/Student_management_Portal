@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}My dashboard · School Portal{% endblock %}
+{% block page_heading %}My learning dashboard{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h1>Hello, {{ student.full_name.split(' ')[0] }} <span>✦</span></h1><p>Keep learning, keep growing. Here’s your academic snapshot.</p></div><div class="today-chip"><i class="bi bi-person-badge"></i> {{ student.admission_no }}</div></div>
+<div class="student-hero">
+  <div class="student-hero-main"><div class="big-avatar">{{ student.full_name[:1]|upper }}</div><div><span class="pill-light">STUDENT PROFILE</span><h2>{{ student.full_name }}</h2><p>Grade {{ student.class_name }} · Section {{ student.section }}</p></div></div>
+  <div class="hero-meta"><div><small>Admission number</small><b>{{ student.admission_no }}</b></div><div><small>Academic year</small><b>2026–27</b></div></div>
+</div>
+<div class="stats-grid student-stats">
+  <div class="stat-card"><div class="stat-icon purple"><i class="bi bi-journal-check"></i></div><div class="stat-label">Subjects with marks</div><div class="stat-number">{{ marks|length }}</div></div>
+  <div class="stat-card"><div class="stat-icon green"><i class="bi bi-percent"></i></div><div class="stat-label">Overall percentage</div><div class="stat-number">{{ '%.1f'|format(percentage) }}%</div><div class="stat-foot">Based on recorded marks</div></div>
+  <div class="stat-card"><div class="stat-icon blue"><i class="bi bi-award"></i></div><div class="stat-label">Current grade</div><div class="stat-number">{{ grade }}</div></div>
+  <div class="stat-card"><div class="stat-icon orange"><i class="bi bi-trophy"></i></div><div class="stat-label">Marks obtained</div><div class="stat-number">{{ obtained|round|int }}<small class="total-small"> / {{ max_total }}</small></div></div>
+</div>
+<div class="panel">
+  <div class="panel-header"><div><h3>My results</h3><p>Your recorded marks by subject</p></div><a class="text-link" href="{{ url_for('results') }}">All results <i class="bi bi-arrow-right"></i></a></div>
+  {% if marks %}<div class="table-responsive"><table class="table custom-table align-middle"><thead><tr><th>SUBJECT</th><th>EXAMINATION</th><th>MARKS</th><th>PERFORMANCE</th></tr></thead><tbody>
+  {% for m in marks %}<tr><td><b>{{ m.subject.name }}</b><div class="muted small">{{ m.subject.code }}</div></td><td>{{ m.exam_name }}<div class="muted small">{{ m.academic_year }}</div></td><td><b>{{ m.marks_obtained|round|int }}</b> <span class="muted">/ {{ m.subject.max_marks }}</span></td><td><div class="mini-progress"><span style="width: {{ (m.marks_obtained / m.subject.max_marks * 100) if m.subject.max_marks else 0 }}%"></span></div><small class="muted">{{ '%.0f'|format(m.marks_obtained / m.subject.max_marks * 100) }}%</small></td></tr>{% endfor %}
+  </tbody></table></div>{% else %}<div class="empty-state"><i class="bi bi-journal-text"></i><p>Your results will appear here once marks are entered.</p></div>{% endif %}
+</div>
+{% endblock %}

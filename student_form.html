@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Add student · School Portal{% endblock %}
+{% block page_heading %}Add a student{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h1>{{ title }} <span>✦</span></h1><p>Add student details and create their portal login.</p></div><a class="btn btn-light" href="{{ url_for('students') }}"><i class="bi bi-arrow-left me-1"></i> Back to students</a></div>
+<form method="post" class="panel form-panel" novalidate>{{ form.hidden_tag() }}
+  <div class="form-section-title"><span class="section-number">01</span><div><h3>Student information</h3><p>Basic personal and academic details</p></div></div>
+  <div class="form-grid">
+    {% for field in [form.admission_no, form.full_name, form.gender, form.date_of_birth, form.class_name, form.section] %}
+    <div class="form-field"><label class="form-label">{{ field.label.text }}</label>{{ field(class="form-control" if field.type not in ['SelectField'] else "form-select") }}{% for e in field.errors %}<small class="field-error">{{ e }}</small>{% endfor %}</div>
+    {% endfor %}
+  </div>
+  <div class="form-section-title mt-4"><span class="section-number">02</span><div><h3>Guardian & contact</h3><p>Contact information for school communication</p></div></div>
+  <div class="form-grid">
+    {% for field in [form.guardian_name, form.guardian_phone, form.email, form.address] %}
+    <div class="form-field"><label class="form-label">{{ field.label.text }}</label>{{ field(class="form-control") }}{% for e in field.errors %}<small class="field-error">{{ e }}</small>{% endfor %}</div>
+    {% endfor %}
+  </div>
+  <div class="form-section-title mt-4"><span class="section-number">03</span><div><h3>Student portal access</h3><p>Give the student their own login credentials</p></div></div>
+  <div class="form-grid">
+    {% for field in [form.username, form.password] %}
+    <div class="form-field"><label class="form-label">{{ field.label.text }}</label>{{ field(class="form-control", placeholder="At least 8 characters" if field.name == 'password' else "Unique username") }}{% for e in field.errors %}<small class="field-error">{{ e }}</small>{% endfor %}</div>
+    {% endfor %}
+  </div>
+  <div class="form-actions"><a href="{{ url_for('students') }}" class="btn btn-light">Cancel</a>{{ form.submit(class="btn btn-primary px-4") }}</div>
+</form>
+{% endblock %}

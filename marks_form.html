@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Enter marks · School Portal{% endblock %}
+{% block page_heading %}Marks entry{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h1>Enter examination marks <span>✦</span></h1><p>Record or update a student's marks for a selected subject and exam.</p></div><a href="{{ url_for('results') }}" class="btn btn-light"><i class="bi bi-arrow-left me-1"></i> View results</a></div>
+<form method="post" class="panel form-panel narrow-form">{{ form.hidden_tag() }}<div class="form-section-title"><span class="section-number"><i class="bi bi-pencil-square"></i></span><div><h3>Examination record</h3><p>Choose a student, subject and exam details.</p></div></div>
+<div class="stack-form">{% for field in [form.student_id,form.subject_id,form.exam_name,form.academic_year,form.marks_obtained] %}<div><label class="form-label">{{ field.label.text }}</label>{{ field(class="form-select" if field.type == 'SelectField' else "form-control") }}{% for e in field.errors %}<small class="field-error">{{ e }}</small>{% endfor %}</div>{% endfor %}</div>
+<div class="notice-box mt-3"><i class="bi bi-info-circle"></i><span>Marks cannot be greater than the maximum configured for the selected subject. Saving the same student, subject, exam and year updates the existing mark.</span></div>
+<div class="form-actions"><a href="{{ url_for('results') }}" class="btn btn-light">Cancel</a>{{ form.submit(class="btn btn-primary px-4") }}</div></form>
+{% endblock %}

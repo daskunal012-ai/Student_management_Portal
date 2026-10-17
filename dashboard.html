@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · School Portal{% endblock %}
+{% block page_heading %}Dashboard overview{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h1>Good to see you, {{ current_user.display_name.split(' ')[0] }} <span>✦</span></h1><p>Here’s what’s happening at your school today.</p></div><div class="today-chip"><i class="bi bi-calendar3"></i> Academic year 2026–27</div></div>
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-icon purple"><i class="bi bi-people"></i></div><div class="stat-label">Total students</div><div class="stat-number">{{ student_count }}</div><div class="stat-foot"><i class="bi bi-arrow-up-right"></i> Student records</div></div>
+  <div class="stat-card"><div class="stat-icon blue"><i class="bi bi-journal-bookmark"></i></div><div class="stat-label">Subjects</div><div class="stat-number">{{ subject_count }}</div><div class="stat-foot">Configured subjects</div></div>
+  <div class="stat-card"><div class="stat-icon orange"><i class="bi bi-card-checklist"></i></div><div class="stat-label">Marks recorded</div><div class="stat-number">{{ mark_count }}</div><div class="stat-foot">Across all examinations</div></div>
+  <div class="stat-card"><div class="stat-icon green"><i class="bi bi-collection"></i></div><div class="stat-label">Grades active</div><div class="stat-number">{{ class_count }}</div><div class="stat-foot">Grades with students</div></div>
+</div>
+<div class="content-grid">
+  <div class="panel">
+    <div class="panel-header"><div><h3>Recently added students</h3><p>Latest student profiles in the system</p></div><a class="text-link" href="{{ url_for('students') }}">View all <i class="bi bi-arrow-right"></i></a></div>
+    {% if latest_students %}
+    <div class="table-responsive"><table class="table align-middle custom-table"><thead><tr><th>STUDENT</th><th>ADMISSION NO.</th><th>CLASS</th><th></th></tr></thead><tbody>
+    {% for s in latest_students %}<tr><td><div class="person-cell"><span class="person-avatar">{{ s.full_name[:1]|upper }}</span><b>{{ s.full_name }}</b></div></td><td class="muted">{{ s.admission_no }}</td><td><span class="class-pill">Grade {{ s.class_name }}-{{ s.section }}</span></td><td><a class="icon-link" href="{{ url_for('student_detail', student_id=s.id) }}"><i class="bi bi-chevron-right"></i></a></td></tr>{% endfor %}
+    </tbody></table></div>
+    {% else %}<div class="empty-state"><i class="bi bi-people"></i><p>No students added yet.</p></div>{% endif %}
+  </div>
+  <div class="panel">
+    <div class="panel-header"><div><h3>Quick actions</h3><p>Common school tasks</p></div></div>
+    <div class="quick-actions">
+      {% if current_user.role == 'admin' %}<a href="{{ url_for('student_new') }}"><span class="quick-icon purple"><i class="bi bi-person-plus"></i></span><span><b>Add a student</b><small>Create a profile and login</small></span><i class="bi bi-arrow-up-right ms-auto"></i></a>{% endif %}
+      <a href="{{ url_for('results') }}"><span class="quick-icon green"><i class="bi bi-award"></i></span><span><b>View results</b><small>Academic performance</small></span><i class="bi bi-arrow-up-right ms-auto"></i></a>
+      {% if current_user.role in ['admin','teacher'] %}<a href="{{ url_for('marks_entry') }}"><span class="quick-icon orange"><i class="bi bi-pencil-square"></i></span><span><b>Enter marks</b><small>Record examination scores</small></span><i class="bi bi-arrow-up-right ms-auto"></i></a>{% endif %}
+      {% if current_user.role == 'admin' %}<a href="{{ url_for('subjects') }}"><span class="quick-icon blue"><i class="bi bi-journal-plus"></i></span><span><b>Manage subjects</b><small>Configure subjects</small></span><i class="bi bi-arrow-up-right ms-auto"></i></a>{% endif %}
+    </div>
+  </div>
+</div>
+<div class="panel mt-4">
+  <div class="panel-header"><div><h3>Class distribution</h3><p>Student enrolment by grade</p></div></div>
+  {% if grade_stats %}
+  <div class="distribution-list">{% for grade, count in grade_stats %}<div class="distribution-row"><span>Grade {{ grade }}</span><div class="distribution-track"><div class="distribution-fill" style="width: {{ (count / student_count * 100) if student_count else 0 }}%"></div></div><b>{{ count }}</b></div>{% endfor %}</div>
+  {% else %}<p class="muted">No class data yet.</p>{% endif %}
+</div>
+{% endblock %}

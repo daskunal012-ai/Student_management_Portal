@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Sign in · School Portal{% endblock %}
+{% block auth_content %}
+<div class="login-wrap">
+  <div class="login-visual">
+    <div class="login-brand"><span class="brand-mark"><i class="bi bi-mortarboard-fill"></i></span><span><b>School Portal</b><small>SCHOOL MANAGEMENT SYSTEM</small></span></div>
+    <div class="visual-copy">
+      <span class="pill-light">ONE SCHOOL. ONE PORTAL.</span>
+      <h1>Every learner.<br><em>Every possibility.</em></h1>
+      <p>A connected space for student records, academic performance, and school administration.</p>
+      <div class="visual-stats"><div><b>Learn</b><small>Grow every day</small></div><div><b>Measure</b><small>Celebrate progress</small></div><div><b>Achieve</b><small>Shape the future</small></div></div>
+    </div>
+    <div class="visual-footer"><i class="bi bi-stars"></i> A smarter way to manage school life</div>
+  </div>
+  <div class="login-panel">
+    <div class="mobile-brand"><span class="brand-mark"><i class="bi bi-mortarboard-fill"></i></span><b>School Portal</b></div>
+    <div class="login-form-wrap">
+      <span class="eyebrow">WELCOME BACK</span>
+      <h2>Sign in to your account</h2>
+      <p class="muted mb-4">Enter your school credentials to continue.</p>
+      <form method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="mb-3"><label class="form-label">{{ form.username.label.text }}</label>{{ form.username(class="form-control form-control-lg", placeholder="Enter your username", autocomplete="username") }}{% for e in form.username.errors %}<div class="field-error">{{ e }}</div>{% endfor %}</div>
+        <div class="mb-4"><label class="form-label">{{ form.password.label.text }}</label>{{ form.password(class="form-control form-control-lg", placeholder="Enter your password", autocomplete="current-password") }}{% for e in form.password.errors %}<div class="field-error">{{ e }}</div>{% endfor %}</div>
+        {{ form.submit(class="btn btn-primary btn-lg w-100") }}
+      </form>
+      <div class="login-help"><i class="bi bi-shield-check"></i><span>Your account is protected by password hashing and role-based access.</span></div>
+      <div class="demo-box"><b><i class="bi bi-info-circle"></i> Demo access</b><p class="mb-1">Admin: <code>admin</code> / <code>Admin@12345</code></p><p class="mb-1">Teacher: <code>teacher</code> / <code>Teacher@123</code></p><p class="mb-0">Student: <code>student</code> / <code>Student@123</code></p><small>Demo credentials only. Change before deployment.</small></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
