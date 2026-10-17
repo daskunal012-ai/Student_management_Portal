@@ -11,13 +11,23 @@ from wtforms.validators import DataRequired, Length, NumberRange, Optional, Emai
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import func
 
+
+def _normalize_database_url(database_url):
+    if database_url.startswith("postgres://"):
+        return database_url.replace("postgres://", "postgresql+psycopg://", 1)
+    if database_url.startswith("postgresql://"):
+        return database_url.replace("postgresql://", "postgresql+psycopg://", 1)
+    return database_url
+
+
 app = Flask(__name__)
 secret_key = os.environ.get("SECRET_KEY")
 debug_enabled = os.environ.get("FLASK_DEBUG") == "1"
 if not secret_key and not debug_enabled:
     raise RuntimeError("Set SECRET_KEY before starting the app, or set FLASK_DEBUG=1 for local development.")
 app.config["SECRET_KEY"] = secret_key or "local-only-development-secret"
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///school.db")
+database_url = os.environ.get("DATABASE_URL", "sqlite:///school.db")
+app.config["SQLALCHEMY_DATABASE_URI"] = _normalize_database_url(database_url)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SESSION_COOKIE_SECURE"] = os.environ.get("COOKIE_SECURE") == "1"
 
@@ -166,6 +176,11 @@ def index():
     if current_user.is_authenticated:
         return redirect(url_for("dashboard"))
     return redirect(url_for("login"))
+
+
+@app.route("/healthz")
+def health_check():
+    return {"status": "ok"}, 200
 
 
 @app.route("/login", methods=["GET", "POST"])

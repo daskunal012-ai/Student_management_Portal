@@ -4,6 +4,8 @@ A Flask application for student profiles, subjects, examination marks, results, 
 
 This is a learning/demo project, not a production-ready school information system. Use fictional data while testing. Do not publish real student information or deploy the demo accounts to a public website.
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/daskunal012-ai/Student_management_Portal)
+
 ## What it can do
 
 - Administrator, teacher, and student sign-in with role-protected routes
@@ -39,6 +41,23 @@ static/css/style.css        Application styling
 .gitignore                  Excludes secrets, databases, and generated files
 ```
 
+## Deploy from GitHub with a hosted subdomain
+
+The quickest hosted demo is Render, which connects to this GitHub repository, provisions the web app and PostgreSQL database from `render.yaml`, and assigns the service an `onrender.com` subdomain.
+
+1. Click **Deploy to Render** above and sign in to Render using your GitHub account.
+2. Authorize Render to read `daskunal012-ai/Student_management_Portal`, then review the Blueprint resources.
+3. Select the Free plans if offered. Render will ask you for `INITIAL_ADMIN_PASSWORD`; choose a private password with at least 12 characters. Do not send it in chat, commit it, or reuse a personal password.
+4. Confirm deployment. Render builds the app, connects it to PostgreSQL, and assigns the default URL `https://student-management-portal-daskunal012.onrender.com`. If that subdomain is already taken, use the URL Render assigns to the web service.
+5. Wait for the deployment health check to pass, then open the service URL and sign in as `admin` with the initial password you entered.
+6. After confirming that the administrator account works, remove `INITIAL_ADMIN_PASSWORD` from the Render service's environment variables and redeploy. Keep `SECRET_KEY`, `DATABASE_URL`, `FLASK_DEBUG=0`, and `COOKIE_SECURE=1`.
+
+Each push to `main` automatically triggers a Render deployment. GitHub Actions separately runs the tests on Python 3.10 through 3.13.
+
+**Free-plan warning:** the app sleeps after 15 minutes without traffic, so its first request may take about a minute to wake. Free Render Postgres is limited and expires 30 days after creation; after its grace period, its data is deleted. This is only a temporary demo setup. Do not store real student data or rely on the free database for durable records. Upgrade the database and configure backups before any continued use.
+
+GitHub Pages alone cannot run this project because it only hosts static files; the Flask server and database require an application host such as Render.
+
 ## Run a local demo on Windows
 
 PowerShell:
@@ -66,7 +85,7 @@ These are public demonstration credentials, not secure passwords. Do not use dem
 
 To use the `.env.example` as a local reference, copy it to `.env` and set the variables in your terminal. The application does not automatically load `.env`; set those variables in your shell or use a local environment loader that you install and configure separately. Never commit `.env`.
 
-## Deploy to PythonAnywhere
+## Alternative: deploy to PythonAnywhere
 
 `wsgi.py` is the production entry point. It fails closed if the secret or initial administrator password is missing, if Flask debug mode is enabled, or if demo seeding is enabled. This prevents accidentally starting a new public instance with the known demo accounts.
 

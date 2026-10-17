@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: student-management-portal-daskunal012
+    runtime: python
+    plan: free
+    region: singapore
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn wsgi:application
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.4
+      - key: FLASK_DEBUG
+        value: "0"
+      - key: COOKIE_SECURE
+        value: "1"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: student-management-portal-db
+          property: connectionString
+      - key: INITIAL_ADMIN_PASSWORD
+        sync: false
+
+databases:
+  - name: student-management-portal-db
+    databaseName: school_management
+    user: school_management
+    plan: free
+    region: singapore
