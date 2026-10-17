@@ -1,6 +1,7 @@
 services:
   - type: web
     name: student-management-portal-daskunal012
+    branch: main
     runtime: python
     plan: free
     region: singapore

@@ -164,9 +164,9 @@ If an existing database already contains users, seed/bootstrap settings do not r
 - Do not use the built-in Flask development server for deployment.
 - Keep secrets and database files out of Git; use fictional data for demos.
 - Student data is sensitive. Production use needs approval, secure hosting, HTTPS, backup/restore plans, privacy controls, and a security review.
-- This project does not yet include automated tests, database migration tooling, password reset, rate limiting, audit logs, or production monitoring.
+- The project includes automated tests, but not database migration tooling, password reset, rate limiting, audit logs, or production monitoring.
 - Date of birth and some school configuration are currently represented with simple strings / fixed choices.
-- The application is a compact starter and has most routes/models/forms in `app.py`; larger deployments should add an application factory, blueprints, tests, and migrations.
+- The application is a compact starter and has most routes/models/forms in `app.py`; larger deployments should add an application factory, blueprints, expanded test coverage, and migrations.
 
 ## Project documents
 
